@@ -1,4 +1,5 @@
 class ArticlesController < ApplicationController
+	include ArticlesHelper
 
 	def index
 		@articles = Article.all
@@ -23,8 +24,10 @@ class ArticlesController < ApplicationController
 	end
 
 	def destroy
-		@article = Article.destroy(params[:id])
+		@article = Article.find(params[:id])
+		@article.destroy
 		flash.notice = "Article '#{@article.title}' Deleted!"
+		redirect_to articles_path
 	end
 
 	def edit
@@ -38,10 +41,6 @@ class ArticlesController < ApplicationController
 		flash.notice = "Article '#{@article.title}' Updated!"
 
 		redirect_to article_path(@article)
-	end
-
-	def article_params
-		params.require(:article).permit(:title, :body)
 	end
 
 end
